@@ -1,0 +1,29 @@
+{
+  "name": "miyachat",
+  "version": "1.0.0",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "~51.0.28",
+    "expo-status-bar": "~1.12.1",
+    "react": "18.2.0",
+    "react-native": "0.74.5",
+    "expo-font": "~12.0.10",
+    "expo-splash-screen": "~0.27.6",
+    "expo-image-picker": "~15.0.7",
+    "@react-native-async-storage/async-storage": "1.23.1",
+    "@expo/vector-icons": "^14.0.3",
+    "expo-router": "~3.5.23",
+    "expo-navigation-bar": "~3.0.7",
+    "@shopify/flash-list": "1.6.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0"
+  },
+  "private": true
+}
