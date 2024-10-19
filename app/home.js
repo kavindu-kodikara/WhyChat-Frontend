@@ -47,7 +47,7 @@ export default function Home() {
        console.log(user.id);
        setName(user.fname)
       let response = await fetch(
-        "http://192.168.1.103:8080/MiyaChat/LoadHomeData?id="+user.id
+        process.env.EXPO_PUBLIC_URL+"/LoadHomeData?id="+user.id
       );
 
       if (response.ok) {

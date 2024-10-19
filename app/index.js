@@ -104,13 +104,15 @@ import { StatusBar } from "expo-status-bar";
             console.log(data);
   
             let response = await fetch(
-              "http://192.168.1.103:8080/MiyaChat/SignIn",
+              process.env.EXPO_PUBLIC_URL+"/SignIn",
               {
                 method: "POST",
                 body: JSON.stringify(data),
               }
             );
+
            console.log(response.ok);
+           
             if (response.ok) {
               let json = await response.json();
                console.log(json);

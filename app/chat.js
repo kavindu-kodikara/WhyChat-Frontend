@@ -28,7 +28,7 @@ export default function Chat() {
       let user = JSON.parse(userJson);
 
       let response = await fetch(
-        "http://192.168.1.103:8080/MiyaChat/LoadChat?logged_user_id=" +
+        process.env.EXPO_PUBLIC_URL+"/LoadChat?logged_user_id=" +
           user.id +
           "&other_user_id=" +
           otheruser.other_user_id
@@ -115,7 +115,7 @@ setInterval(()=>{
                 "&message="+getChatTxt)
 
               let response = await fetch(
-                "http://192.168.1.103:8080/MiyaChat/SendChat?logged_user_id=" +
+                process.env.EXPO_PUBLIC_URL+"/SendChat?logged_user_id=" +
                 user.id +
                 "&other_user_id=" +
                 otheruser.other_user_id +

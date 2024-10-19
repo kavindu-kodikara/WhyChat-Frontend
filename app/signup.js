@@ -96,7 +96,7 @@ export default function signup() {
           console.log(data);
 
           let response = await fetch(
-            "http://192.168.1.103:8080/MiyaChat/SignUp",
+            process.env.EXPO_PUBLIC_URL+"/SignUp",
             {
               method: "POST",
               body: JSON.stringify(data),
