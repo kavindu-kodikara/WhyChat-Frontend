@@ -142,7 +142,7 @@ setInterval(()=>{
 
 const stylesheet = StyleSheet.create({
   container: {
-    backgroundColor: "black",
+    backgroundColor: "white",
     flex: 1,
   },
   prview: {
