@@ -11,6 +11,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
 import { router } from "expo-router";
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 export default function signup() {
@@ -82,9 +83,9 @@ export default function signup() {
       />
 
       <Pressable
-        style={stylesheet.btn1}
+         style={stylesheet.btn1} 
         onPress={async () => {
-          
+         
 
           data = {
             fname: getFname,
@@ -116,7 +117,10 @@ export default function signup() {
           }
         }}
       >
-        <Text style={stylesheet.text2}>Sign Up</Text>
+       
+       <Text style={stylesheet.text2}>Sign Up</Text>
+       
+        
       </Pressable>
       <Pressable onPress={
         ()=>{
@@ -133,7 +137,7 @@ export default function signup() {
 
 const stylesheet = StyleSheet.create({
   view1: {
-    backgroundColor: "#CFECF7",
+    backgroundColor: "white",
     flex: 1,
     justifyContent: "center",
     padding: 10,
@@ -153,16 +157,17 @@ const stylesheet = StyleSheet.create({
     fontFamily: "Fredoka-Light",
   },
   btn1: {
-    backgroundColor: "white",
+    
     justifyContent: "center",
     alignItems: "center",
     height: 50,
     width: "100%",
     borderRadius: 10,
     marginTop: 20,
+    backgroundColor:"#28C7C7"
   },
   text2: {
-    color: "black",
+    color: "white",
     fontSize: 25,
     justifyContent: "center",
     alignItems: "center",
@@ -192,5 +197,7 @@ const stylesheet = StyleSheet.create({
   txt7:{
     color:"black",
     textAlign:"center"
-  }
+  },
+  
+  
 });
