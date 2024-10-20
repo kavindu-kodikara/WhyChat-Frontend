@@ -1,206 +1,135 @@
 import {
-    View,
-    StyleSheet,
-    TextInput,
-    Text,
-    Pressable,
-    Image,
-    Alert,
-    SafeAreaView
-  } from "react-native";
-  import * as SplashScreen from "expo-splash-screen";
-  import { useEffect, useState } from "react";
-  import { useFonts } from "expo-font";
-  import { registerRootComponent } from "expo";
+  View,
+  StyleSheet,
+  TextInput,
+  Text,
+  Pressable,
+  Alert,
+  SafeAreaView,
+} from "react-native";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect, useState } from "react";
+import { useFonts } from "expo-font";
+import { registerRootComponent } from "expo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-  
-  export default function index() {
+import { LinearGradient } from "expo-linear-gradient";
+import { Image } from "expo-image";
+import { Video } from "expo-av";
+import * as NavigationBar from "expo-navigation-bar";
 
-    
+import React, { useRef } from "react";
+import * as Animatable from "react-native-animatable";
 
-    SplashScreen.preventAutoHideAsync();
-  
-    const logoPath = require("../assets/abcd.jpg");
-  
-    const [getMobile, setMobile] = useState("");
-    const [getPassword, setPassword] = useState("");
-  
-    const [loaded, error] = useFonts({
-      // FredokaLight: require("../assets/fonts/Fredoka-Light.ttf"),
-      // Fredoka: require("../assets/fonts/Fredoka.ttf"),
-      // FredokaSemiBold: require("../assets/fonts/Fredoka-SemiBold.ttf"),
-      // DancingScript_VariableFont_wght: require("../assets/fonts/DancingScript-VariableFont_wght.ttf"),
-    });
-  
-    useEffect(
-       () => {
-        async function cheackuser(){
-          try{
-            let userJson = await AsyncStorage.getItem("user");
-            if(userJson !=null){
-              router.replace("/home");
-            }
-  
-          }catch(e){
-            console.log(e);
-          }
+export default function index() {
+  NavigationBar.setButtonStyleAsync("dark");
+  NavigationBar.setBackgroundColorAsync("white");
+
+  useEffect(() => {
+    async function cheackuser() {
+      try {
+        let userJson = await AsyncStorage.getItem("user");
+        if (userJson != null) {
+          router.replace("/home");
         }
-        cheackuser();
-       },[]
-      );
-    
-
-    useEffect(() => {
-      if (loaded || error) {
-        SplashScreen.hideAsync();
+      } catch (e) {
+        console.log(e);
       }
-    }, [loaded, error]);
-
-    if(!loaded && !error){
-      return null;
     }
-  
-    return (
-      <SafeAreaView style={stylesheet.view1}>
-        <StatusBar style="light" backgroundColor="black" />
-        <Image source={logoPath} style={stylesheet.img1} contentFit="contain" />
-  
-        <Text style={stylesheet.text4}>Why</Text>
-  
-        <Text style={stylesheet.text3}>Sign In</Text>
-  
-        <Text style={stylesheet.text1}>Mobile</Text>
-        <TextInput
-          style={stylesheet.input1}
-          inputMode={"tel"}
-          onChangeText={(text) => {
-            setMobile(text);
-          }}
-        />
-  
-        <Text style={stylesheet.text1}>Password</Text>
-        <TextInput
-          style={stylesheet.input1}
-          secureTextEntry={true}
-          inputMode={"text"}
-          onChangeText={(text) => {
-            setPassword(text);
-          }}
-        />
-  
+    cheackuser();
+  }, []);
+
+  const firstViewRef = useRef(null);
+
+  useEffect(() => {
+    // Start the first view's animation
+    firstViewRef.current.transition(
+      { opacity: 0, translateY: 70 },
+      { opacity: 1, translateY: 0 },
+      500,
+      "ease-out"
+    );
+
+  }, []);
+
+
+
+  return (
+    <View style={stylesheet.view1}>
+      <StatusBar style="dark" backgroundColor="white" />
+
+      <Video
+        source={require("../assets/Conversation.mp4")}
+        style={stylesheet.img1}
+        shouldPlay
+        isLooping={false}
+        resizeMode="cover"
+      />
+
+      <Animatable.View ref={firstViewRef}>
+        <Text style={stylesheet.text4}>
+          Enjoy the new experience of chatting with global friends
+        </Text>
+      
+        <Text style={stylesheet.txt7}>
+          Connect people around the world for free
+        </Text>
+      
         <Pressable
           style={stylesheet.btn1}
-          onPress={async () => {
-            
-  
-            data = {
-              
-              mobile: getMobile,
-              password: getPassword,
-            };
-  
-            console.log(data);
-  
-            let response = await fetch(
-              process.env.EXPO_PUBLIC_URL+"/SignIn",
-              {
-                method: "POST",
-                body: JSON.stringify(data),
-              }
-            );
-
-           console.log(response.ok);
-           
-            if (response.ok) {
-              let json = await response.json();
-               console.log(json);
-              if (json.success) {
-                await AsyncStorage .setItem('user', JSON.stringify(json.user));
-                router.replace("/home");
-              } else {
-                Alert.alert("Error", json.message);
-              }
-            } else {
-              Alert.alert("Error", "Something went wrong please try again later");
-            }
+          onPress={() => {
+            router.push("/signin");
           }}
         >
-          <Text style={stylesheet.text2}>Sign In</Text>
+          <Text style={stylesheet.text2}>Get started</Text>
         </Pressable>
-        <Pressable onPress={
-          ()=>{
-            router.replace("/signup");
-          }
-        } >
-        <Text style={stylesheet.txt7} >Don't you have an account?create Account</Text>
-      </Pressable>
-      </SafeAreaView>
-    );
-  }
-  
- 
-  const stylesheet = StyleSheet.create({
-    view1: {
-      backgroundColor: "#CFECF7",
-      flex: 1,
-      justifyContent: "center",
-      padding: 10,
-      rowGap: 10,
-    },
-    input1: {
-      backgroundColor:"white",
-      height: 50,
-      width: "100%",
-      rowGap: 10,
-      padding: 10,
-      borderRadius: 10,
-    },
-    text1: {
-      color: "black",
-      fontSize: 20,
-      // fontFamily: "Fredoka-Light",
-    },
-    btn1: {
-      backgroundColor: "white",
-      justifyContent: "center",
-      alignItems: "center",
-      height: 50,
-      width: "100%",
-      borderRadius: 10,
-      marginTop: 20,
-    },
-    text2: {
-      color: "black",
-      fontSize: 25,
-      justifyContent: "center",
-      alignItems: "center",
-      // fontFamily: "Fredoka",
-    },
-  
-    text3: {
-      color: "black",
-      fontSize: 25,
-      textAlign: "center",
-      fontWeight: "bold",
-      // fontFamily: "FredokaSemiBold",
-    },
-    img1: {
-      alignSelf: "center",
-      width: 80,
-      height: 80,
-    },
-    text4: {
-      color: "black",
-      fontSize: 30,
-      textAlign: "center",
-      fontWeight: "bold",
-      // fontFamily: "DancingScript_VariableFont_wght",
-    },
-    txt7:{
-      color:"black",
-      textAlign:"center"
-    }
-  });
-  
+
+      </Animatable.View>
+
+    </View>
+  );
+}
+
+const stylesheet = StyleSheet.create({
+  view1: {
+    flex: 1,
+    padding: 15,
+    rowGap: 10,
+    alignItems: "center",
+  },
+  btn1: {
+    backgroundColor: "#28C7C7",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 50,
+    width: 180,
+    borderRadius: 25,
+    marginTop: 30,
+    alignSelf:"center"
+  },
+  text2: {
+    color: "white",
+    fontSize: 25,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  img1: {
+    alignSelf: "center",
+    width: 500,
+    height: 550,
+  },
+  text4: {
+    color: "black",
+    fontSize: 22,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  txt7: {
+    fontSize: 15,
+    color: "#9A9A9A",
+    textAlign: "center",
+    marginTop: 10,
+  },
+});
