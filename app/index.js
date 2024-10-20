@@ -45,7 +45,7 @@ export default function index() {
   useEffect(() => {
     // Start the first view's animation
     firstViewRef.current.transition(
-      { opacity: 0, translateY: 70 },
+      { opacity: 0, translateY: 100 },
       { opacity: 1, translateY: 0 },
       500,
       "ease-out"
@@ -117,8 +117,8 @@ const stylesheet = StyleSheet.create({
 
   img1: {
     alignSelf: "center",
-    width: 500,
-    height: 550,
+    width: "100%",
+    height: "70%",
   },
   text4: {
     color: "black",
