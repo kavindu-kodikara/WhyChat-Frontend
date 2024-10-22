@@ -75,14 +75,15 @@ export default function Home() {
   }
 
   return (
-    <SafeAreaView style={stylesheet.container}>
+    <View style={stylesheet.container}>
       <StatusBar style="light" backgroundColor="black" />
       <View style={stylesheet.view2}>
         <View style={stylesheet.titleSubView1}>
-          <Text style={stylesheet.titleTxt}>Hello {getName}!</Text>
+          <Text style={stylesheet.titleTxt}>Why</Text>
         </View>
         <View style={stylesheet.titleSubView2}>
-          <FontAwesome6 name={"bars"} size={20} color={"white"} />
+        <FontAwesome6 name={"magnifying-glass"} size={20} color={"#28C7C7"} />
+          <FontAwesome6 name={"bars"} size={20} color={"#28C7C7"} />
         </View>
       </View>
       <FlashList
@@ -131,7 +132,7 @@ export default function Home() {
       
        
       
-    </SafeAreaView>
+    </View>
   );
   
 }
@@ -139,8 +140,9 @@ export default function Home() {
 const stylesheet = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#CFECF7",
+    backgroundColor: "white",
     padding: 15,
+
   },
 
   view2: {
@@ -156,7 +158,9 @@ const stylesheet = StyleSheet.create({
   },
   titleSubView2: {
     flex: 2,
-    alignItems: "flex-end",
+    flexDirection:"row",
+    justifyContent:"flex-end",
+   columnGap:20
   },
 
   View3: {
@@ -168,7 +172,8 @@ const stylesheet = StyleSheet.create({
   titleTxt: {
     fontSize: 30,
     
-    fontFamily: "DancingScript_VariableFont_wght",
+    
+    color:"#28C7C7"
   },
 
   chatName: {
@@ -198,6 +203,7 @@ const stylesheet = StyleSheet.create({
     padding: 8,
     paddingStart: 15,
     borderRadius: 15,
+   
   },
   chatContainer: {
     marginBottom: 10,
@@ -224,6 +230,8 @@ const stylesheet = StyleSheet.create({
   View4: {
     flex: 1,
     flexDirection: "row",
+    borderColor:"#28C7C7",
+    
     
   },
   view7: {
