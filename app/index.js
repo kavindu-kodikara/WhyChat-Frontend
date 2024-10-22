@@ -41,6 +41,8 @@ export default function index() {
   }, []);
 
   const firstViewRef = useRef(null);
+  const secondViewRef = useRef(null);
+  const theredViewRef = useRef(null);
 
   useEffect(() => {
     // Start the first view's animation
@@ -51,9 +53,25 @@ export default function index() {
       "ease-out"
     );
 
+    setTimeout(() => {
+      secondViewRef.current.transition(
+        { opacity: 0, translateY: 100 },
+        { opacity: 1, translateY: 0 },
+        500,
+        "ease-out"
+      );
+    }, 200);
+
+    setTimeout(() => {
+      theredViewRef.current.transition(
+        { opacity: 0, translateY: 100 },
+        { opacity: 1, translateY: 0 },
+        500,
+        "ease-out"
+      );
+    }, 400);
+
   }, []);
-
-
 
   return (
     <View style={stylesheet.view1}>
@@ -67,15 +85,19 @@ export default function index() {
         resizeMode="cover"
       />
 
-      <Animatable.View ref={firstViewRef}>
+      <Animatable.View ref={firstViewRef} style={stylesheet.animatedView}>
         <Text style={stylesheet.text4}>
           Enjoy the new experience of chatting with global friends
         </Text>
-      
+      </Animatable.View>
+
+      <Animatable.View ref={secondViewRef} style={stylesheet.animatedView}>
         <Text style={stylesheet.txt7}>
           Connect people around the world for free
         </Text>
-      
+      </Animatable.View>
+
+      <Animatable.View ref={theredViewRef} style={stylesheet.animatedView}>
         <Pressable
           style={stylesheet.btn1}
           onPress={() => {
@@ -84,9 +106,7 @@ export default function index() {
         >
           <Text style={stylesheet.text2}>Get started</Text>
         </Pressable>
-
       </Animatable.View>
-
     </View>
   );
 }
@@ -98,6 +118,10 @@ const stylesheet = StyleSheet.create({
     rowGap: 10,
     alignItems: "center",
   },
+  animatedView: {
+    transform: [{ translateY: 100 }],
+    opacity: 0,
+  },
   btn1: {
     backgroundColor: "#28C7C7",
     justifyContent: "center",
@@ -106,11 +130,11 @@ const stylesheet = StyleSheet.create({
     width: 180,
     borderRadius: 25,
     marginTop: 30,
-    alignSelf:"center"
+    alignSelf: "center",
   },
   text2: {
     color: "white",
-    fontSize: 25,
+    fontSize: 20,
     justifyContent: "center",
     alignItems: "center",
   },
