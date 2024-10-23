@@ -17,7 +17,7 @@ import {
 } from "react-native";
 
 export default function Chat() {
-  const logoPath = require("../assets/0715126969.png");
+  // const logoPath = require("../assets/0715126969.png");
   const [getChatArray, setChatArray] = useState([]);
   const otheruser = useLocalSearchParams();
   const [getChatTxt, setChatTxt] = useState("");
@@ -49,18 +49,18 @@ setInterval(()=>{
   }, []);
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={stylesheet.container}  >
-      <StatusBar style="dark" backgroundColor="#D8D2F8"/>
+      <StatusBar style="dark" backgroundColor="white"/>
       <View style={stylesheet.prview}>
         <Pressable
           onPress={() => {
             router.back();
           }}
         >
-          <FontAwesome6 name={"arrow-left"} size={20} color={"purple"} />
+          <FontAwesome6 name={"arrow-left"} size={20} color={"#28C7C7"} />
         </Pressable>
         <View style={stylesheet.prof}>
           <Image
-            source={logoPath}
+            // source={logoPath}
             style={stylesheet.img1}
             contentFit="contain"
           />
@@ -69,6 +69,9 @@ setInterval(()=>{
         <View style={stylesheet.txtview}>
           <Text style={stylesheet.text1}>{otheruser.other_user_name}</Text>
           
+        </View>
+        <View style={stylesheet.view0}>
+        <FontAwesome6 name={"bars"} size={20} color={"#28C7C7"} />
         </View>
       </View>
       
@@ -96,6 +99,8 @@ setInterval(()=>{
       /></View>
 
       <View style={stylesheet.view7}>
+      <FontAwesome6 name={"face-smile"} color={"#28C7C7"} size={20} />
+
         <TextInput style={stylesheet.input1} inputMode={"text"}
         value={getChatTxt}
           onChangeText={(txt) => {
@@ -132,7 +137,7 @@ setInterval(()=>{
               }
             }
           }}>
-          <FontAwesome6 name={"paper-plane"} color={"black"} size={20} />
+          <FontAwesome6 name={"paper-plane"} color={"#28C7C7"} size={20} />
           
         </Pressable>
       </View>
@@ -146,7 +151,7 @@ const stylesheet = StyleSheet.create({
     flex: 1,
   },
   prview: {
-    backgroundColor: "#D8D2F8",
+    backgroundColor: "white",
     height: 70,
     width: "100%",
     padding: 15,
@@ -166,20 +171,21 @@ const stylesheet = StyleSheet.create({
     alignItems: "center",
   },
   text1: {
-    color: "black",
+    color: "#28C7C7",
     fontSize: 23,
   },
   text2: {
-    color: "black",
+    color: "#28C7C7",
     fontSize: 10,
   },
   img1: {
     width: 50,
     height: 50,
     borderRadius: 25,
+    backgroundColor:"#28C7C7"
   },
   view5_1: {
-    backgroundColor: "#DC9AEE",
+    backgroundColor: "#28C7C7",
     borderTopRightRadius:20,
     borderTopLeftRadius:20,
     marginHorizontal: 20,
@@ -193,7 +199,7 @@ const stylesheet = StyleSheet.create({
     borderBottomLeftRadius:20
   },
   view5_2: {
-    backgroundColor: "#DC9AEE",
+    backgroundColor: "#28C7C7",
     marginHorizontal: 20,
     marginVertical: 15,
     padding: 10,
@@ -231,11 +237,11 @@ const stylesheet = StyleSheet.create({
     fontSize: 20,
     flex: 1,
     paddingStart: 10,
-    backgroundColor: "#D8D2F8",
+    backgroundColor: "white",
 
   },
   pressable: {
-    backgroundColor: "#D8D2F8",
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 10,
     justifyContent: "center",
@@ -253,4 +259,12 @@ const stylesheet = StyleSheet.create({
     flex: 1,
     marginVertical: 20,
   },
+  view0:{
+    alignItems:"flex-end",
+    justifyContent:"flex-end",
+    flexDirection:"row",
+    flex:1,
+   
+
+  }
 });

@@ -127,7 +127,23 @@ export default function Home() {
         )}
         estimatedItemSize={200}
       />
-     
+      <View style={stylesheet.view2}>
+        
+        <View style={stylesheet.titleSubView3}>
+        <View style={stylesheet.flex1}>
+        <FontAwesome6 name={"spinner"} size={20} color={"#28C7C7"} />
+
+        </View>
+        <View style={stylesheet.flex1} >
+        <FontAwesome6 name={"comment"} size={20} color={"#28C7C7"} />
+
+        </View>
+        <View style={stylesheet.flex1} >
+        <FontAwesome6 name={"user"} size={20} color={"#28C7C7"} />
+
+        </View>
+        </View>
+      </View>
 
       
        
@@ -160,7 +176,7 @@ const stylesheet = StyleSheet.create({
     flex: 2,
     flexDirection:"row",
     justifyContent:"flex-end",
-   columnGap:20
+   columnGap:30
   },
 
   View3: {
@@ -281,6 +297,19 @@ const stylesheet = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor:"#CFECF7",
+    backgroundColor:"#28C7C7",
   },
+  titleSubView3: {
+    flex: 2,
+    flexDirection:"row",
+    justifyContent:"center",
+    alignItems:"center",
+    
+   
+  },
+  flex1:{
+    flex:1,
+    justifyContent:"center",
+    alignItems:"center"
+  }
 });
