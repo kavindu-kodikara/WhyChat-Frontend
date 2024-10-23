@@ -46,31 +46,49 @@ export default function index() {
 
   useEffect(() => {
     // Start the first view's animation
-    firstViewRef.current.transition(
-      { opacity: 0, translateY: 100 },
-      { opacity: 1, translateY: 0 },
-      500,
-      "ease-out"
-    );
-
+    if (firstViewRef.current) {
+      firstViewRef.current.transition(
+        { opacity: 0, translateY: 100 },
+        { opacity: 1, translateY: 0 },
+        500,
+        "ease-out"
+      );
+    }
     setTimeout(() => {
+      if (secondViewRef.current) {
       secondViewRef.current.transition(
         { opacity: 0, translateY: 100 },
         { opacity: 1, translateY: 0 },
         500,
         "ease-out"
       );
+    }
     }, 200);
 
     setTimeout(() => {
+      if (theredViewRef.current) {
       theredViewRef.current.transition(
         { opacity: 0, translateY: 100 },
         { opacity: 1, translateY: 0 },
         500,
         "ease-out"
       );
+    }
     }, 400);
+  }, []);
 
+  useEffect(() => {
+    async function cheackuser() {
+      try {
+        let userJson = await AsyncStorage.getItem("user");
+        if (userJson != null) {
+          router.replace("/home");
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    cheackuser();
   }, []);
 
   return (
