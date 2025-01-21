@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "MiyaChat",
-    "slug": "MiyaChat",
-    "scheme": "MiyaChat",
+    "name": "Why",
+    "slug": "Why",
+    "scheme": "Why",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

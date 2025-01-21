@@ -3,14 +3,12 @@ import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import {
- 
   Image,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -21,94 +19,121 @@ import * as NavigationBar from "expo-navigation-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+import { closeWebSocket, getWebSocket } from "./WebSocketManager";
 
 export default function Home() {
-  SplashScreen.preventAutoHideAsync();
-
- 
-  
   const [getChatArray, setChatArray] = useState([]);
-  const[getName,setName] = useState(""); 
-  //const chtimage =  require("../assets/0715126969.png");
-  const [loaded, error] = useFonts({
-    FredokaLight: require("../assets/fonts/Fredoka-Light.ttf"),
-    FredokaMedium: require("../assets/fonts/Fredoka.ttf"),
-    FredokaSemiBold: require("../assets/fonts/Fredoka-SemiBold.ttf"),
-    DancingScript_VariableFont_wght: require("../assets/fonts/DancingScript-VariableFont_wght.ttf"),
-    //LogoFont: require("../assets/fonts/LogoFont.ttf"),
-  });
+  const [getName, setName] = useState("");
+
+  const chtimage = require("../assets/userIcon.png");
+
+  NavigationBar.setButtonStyleAsync("dark");
+  NavigationBar.setBackgroundColorAsync("white");
 
   useEffect(() => {
-    async function FetchData() {
-      console.log("ok");
+    closeWebSocket();
+    async function fetchData() {
       let userJson = await AsyncStorage.getItem("user");
-      
       let user = JSON.parse(userJson);
-       console.log(user.id);
-       setName(user.fname)
-      let response = await fetch(
-        process.env.EXPO_PUBLIC_URL+"/LoadHomeData?id="+user.id
+
+      const mobileNumber = user.mobile;
+      const socket = getWebSocket(
+        process.env.EXPO_PUBLIC_WEBSOCKET_URL +
+          "?type=register&mobileNumber=" +
+          mobileNumber
       );
 
-      if (response.ok) {
-        let json = await response.json();
-        console.log(json)
-        if (json.success) {
-          console.log("hey bb")
-          let chatArray = json.jsonChatArray;
-          setChatArray(chatArray);
-          
-        }
-      }
+      socket.onopen = () => {
+        console.log("Connection opened");
+      };
+
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        let chatArray = data.jsonChatArray;
+        setChatArray(chatArray);
+        // console.log(data);
+      };
+
+      socket.onerror = (error) => {
+        console.error("WebSocket error: ", error.message);
+        console.error("WebSocket error: ", JSON.stringify(error));
+      };
+
+      socket.onclose = () => {
+        console.log("Connection closed");
+      };
+
+      return () => {
+        closeWebSocket();
+      };
     }
-    FetchData();
+
+    fetchData();
   }, []);
-
-  useEffect(() => {
-    if (loaded || error) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded, error]);
-
-  if (!loaded && !error) {
-    return null;
-  }
 
   return (
     <View style={stylesheet.container}>
-      <StatusBar style="light" backgroundColor="black" />
+      <StatusBar style="black" backgroundColor="white" />
       <View style={stylesheet.view2}>
         <View style={stylesheet.titleSubView1}>
           <Text style={stylesheet.titleTxt}>Why</Text>
         </View>
         <View style={stylesheet.titleSubView2}>
-        <FontAwesome6 name={"magnifying-glass"} size={20} color={"#28C7C7"} />
-          <FontAwesome6 name={"bars"} size={20} color={"#28C7C7"} />
+          <FontAwesome6 name={"magnifying-glass"} size={20} color={"black"} />
+          <Pressable onPress={()=>{
+            router.push("/profile");
+          }}>
+            <FontAwesome6 name={"bars"} size={20} color={"black"} />
+          </Pressable>
         </View>
       </View>
       <FlashList
         data={getChatArray}
         renderItem={({ item }) => (
-          <Pressable style={stylesheet.chatContainer} onPress={()=>{
-            router.push({pathname:"/chat",params:item})
-          }}>
+          <Pressable
+            style={stylesheet.chatContainer}
+            onPress={() => {
+              router.push({ pathname: "/chat", params: item });
+            }}
+          >
             <View style={stylesheet.chat}>
-              <View style={stylesheet.view6}>
-              <Image
-            //source={chtimage}
-            style={stylesheet.img1}
-            contentFit="contain"
-          />
-                            </View>
+              <View
+                style={
+                  item.other_user_status == 2
+                    ? stylesheet.view6_offline
+                    : stylesheet.view6_online
+                }
+              >
+                <Image
+                  source={item.avatar_image_found ? {uri:"http://192.168.8.155:8080/AvatarImages/"+item.other_user_mobile+".png"} : chtimage}
+                  style={stylesheet.img1}
+                  contentFit="contain"
+                />
+              </View>
               <View style={stylesheet.View4}>
                 <View style={stylesheet.view8}>
                   <View style={stylesheet.chatTxtView}>
-                    <Text style={stylesheet.chatName}>{item.other_user_name}</Text>
+                    <Text style={stylesheet.chatName}>
+                      {item.other_user_name}
+                    </Text>
                   </View>
                   <View style={stylesheet.chatTxtView}>
-                    {item.chat_status_id == 2 ? <FontAwesome6 name={"check"} color={"#13bffe"} size={18} /> :  <FontAwesome6 name={"check-double"} color={"#13bffe"} size={18} />}
-                    
-                   
+                    {item.chat_status_id == 2 ? (
+                      <FontAwesome6
+                        name={"check"}
+                        color={"#788C75"}
+                        size={18}
+                      />
+                    ) : (
+                      <FontAwesome6
+                        name={"check-double"}
+                        color={"#13bffe"}
+                        size={18}
+                      />
+                    )}
+
                     {/* <FontAwesome6 name={"clock"} color={"#13bffe"} size={18} /> */}
                     <Text style={stylesheet.txt4} numberOfLines={1}>
                       {item.message}
@@ -116,10 +141,29 @@ export default function Home() {
                   </View>
                 </View>
                 <View style={stylesheet.view7}>
-                  <View style={stylesheet.chatTimeView}>
+                  <View
+                    style={
+                      parseInt(item.unseen_chat_count) > 0
+                        ? stylesheet.chatTimeView
+                        : stylesheet.chatTimeView2
+                    }
+                  >
                     <Text style={stylesheet.txt5}>{item.dateTime}</Text>
                   </View>
-                  
+
+                  <View
+                    style={
+                      parseInt(item.unseen_chat_count) > 0
+                        ? stylesheet.chatCountView
+                        : stylesheet.chatCountView2
+                    }
+                  >
+                    <View style={stylesheet.countView}>
+                      <Text style={stylesheet.countTxt}>
+                        {item.unseen_chat_count}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
               </View>
             </View>
@@ -127,56 +171,52 @@ export default function Home() {
         )}
         estimatedItemSize={200}
       />
-      <View style={stylesheet.view2}>
-        
+      <View style={stylesheet.bottemView}>
         <View style={stylesheet.titleSubView3}>
-        <View style={stylesheet.flex1}>
-        <FontAwesome6 name={"spinner"} size={20} color={"#28C7C7"} />
-
-        </View>
-        <View style={stylesheet.flex1} >
-        <FontAwesome6 name={"comment"} size={20} color={"#28C7C7"} />
-
-        </View>
-        <View style={stylesheet.flex1} >
-        <FontAwesome6 name={"user"} size={20} color={"#28C7C7"} />
-
-        </View>
+          <View style={stylesheet.flex1}>
+            <FontAwesome6 name={"spinner"} size={24} color={"#28C7C7"} />
+          </View>
+          <View style={stylesheet.flex1}>
+            <FontAwesome6 name={"comment"} size={24} color={"#28C7C7"} />
+          </View>
+          <View style={stylesheet.flex1}>
+            <FontAwesome6 name={"user"} size={24} color={"#28C7C7"} />
+          </View>
         </View>
       </View>
-
-      
-       
-      
     </View>
   );
-  
 }
 
 const stylesheet = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
-    padding: 15,
-
+    padding: 10,
+    paddingTop: 0,
   },
 
   view2: {
     flexDirection: "row",
     columnGap: 20,
     alignItems: "center",
-    marginBottom: 15,
     padding: 7,
     paddingTop: 0,
+  },
+  bottemView: {
+    flexDirection: "row",
+    columnGap: 20,
+    alignItems: "center",
+    paddingBottom: 10,
+    paddingTop: 10,
   },
   titleSubView1: {
     flex: 2,
   },
   titleSubView2: {
     flex: 2,
-    flexDirection:"row",
-    justifyContent:"flex-end",
-   columnGap:30
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    columnGap: 30,
   },
 
   View3: {
@@ -187,9 +227,9 @@ const stylesheet = StyleSheet.create({
 
   titleTxt: {
     fontSize: 30,
-    
-    
-    color:"#28C7C7"
+    fontWeight: "bold",
+
+    color: "#28C7C7",
   },
 
   chatName: {
@@ -199,13 +239,11 @@ const stylesheet = StyleSheet.create({
   },
 
   txt2: {
-    fontFamily: "FredokaLight",
     fontSize: 16,
     color: "white",
   },
 
   txt3: {
-    fontFamily: "FredokaLight",
     fontSize: 14,
     alignSelf: "flex-end",
     color: "white",
@@ -213,30 +251,32 @@ const stylesheet = StyleSheet.create({
 
   chat: {
     flexDirection: "row",
-    marginVertical: 10,
-    columnGap: 15,
-    backgroundColor: "white",
-    padding: 8,
-    paddingStart: 15,
-    borderRadius: 15,
-   
+    columnGap: 10,
+    paddingVertical: 10,
   },
   chatContainer: {
-    marginBottom: 10,
     height: 80,
   },
-  view6: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+  view6_offline: {
+    width: 66,
+    height: 66,
+    borderRadius: 35,
     backgroundColor: "white",
-    justifyContent:"center",
-    alignItems:"center"
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  view6_online: {
+    width: 66,
+    height: 66,
+    borderRadius: 35,
+    backgroundColor: "#00ff1a",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   txt4: {
     fontSize: 16,
-    color: "#2E1833",
+    color: "#8e8e8e",
     marginLeft: 10,
   },
   txt5: {
@@ -246,18 +286,14 @@ const stylesheet = StyleSheet.create({
   View4: {
     flex: 1,
     flexDirection: "row",
-    borderColor:"#28C7C7",
-    
-    
+    borderColor: "#28C7C7",
   },
   view7: {
     columnGap: 10,
     flex: 1,
-    
   },
   view8: {
     flex: 3,
-   
   },
   chatTxtView: {
     height: "50%",
@@ -281,35 +317,35 @@ const stylesheet = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  chatCountView2: {
+    display: "none",
+  },
   countView: {
-    backgroundColor: "#B729E5",
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    backgroundColor: "#28C7C7",
+    width: 25,
+    height: 25,
+    borderRadius: 15,
     justifyContent: "center",
     alignItems: "center",
   },
   countTxt: {
-    fontFamily: "FredokaMedium",
     color: "white",
+    fontWeight: "bold",
   },
   img1: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor:"#28C7C7",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
   },
   titleSubView3: {
     flex: 2,
-    flexDirection:"row",
-    justifyContent:"center",
-    alignItems:"center",
-    
-   
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  flex1:{
-    flex:1,
-    justifyContent:"center",
-    alignItems:"center"
-  }
+  flex1: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
