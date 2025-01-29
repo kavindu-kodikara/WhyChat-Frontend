@@ -74,7 +74,7 @@ Users can manage their personal details and profile picture.
 
 
 ## Disclaimer
-**This project is intended for demonstration and educational purposes only. Any attempt to publish or redistribute this project as your own is prohibited and will be considered a violation of copyright.**
+**This project is part of my professional portfolio. You’re welcome to reference it, but please credit me if you reuse or adapt any part of it.**
 
 ## License
 This project is licensed under the [MIT License](LICENSE.md).
