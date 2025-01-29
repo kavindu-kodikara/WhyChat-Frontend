@@ -27,6 +27,15 @@ WhyChat provides a comprehensive mobile chat experience:
 - **Frontend Repository (React-Native)**: [Link to Frontend Repo](https://github.com/kavindu-kodikara/WhyChat-Frontend.git)  
 - **Backend Repository (Spring Boot)**: [Link to Backend Repo](https://github.com/kavindu-kodikara/WhyChat-Backend.git)
 
+
+## Project Demo
+Check out the demo video below:
+
+<a href="https://www.youtube.com/watch?v=AiVauAozpfI">
+  <img src="https://img.youtube.com/vi/AiVauAozpfI/maxresdefault.jpg" width="800">
+</a>
+
+
 ## Detailed Breakdown
 
 ### 1. SignIn/SignUp Pages
